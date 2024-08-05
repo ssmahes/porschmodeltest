@@ -1,0 +1,97 @@
+Ja, het is zeker mogelijk om uw Conda-omgeving te delen tussen verschillende computers, en GitHub kan daarbij helpen. Hier zijn een paar manieren om dit te doen:
+
+1. Environment YAML file:
+
+   Deze methode is het meest gebruikelijk en flexibel.
+
+   a. Exporteer uw omgeving naar een YAML-bestand:
+      ```
+      conda env export > environment.yml
+      ```
+
+   b. Voeg dit bestand toe aan uw GitHub repository.
+
+   c. Op een andere computer kunt u de omgeving recreëren met:
+      ```
+      conda env create -f environment.yml
+      ```
+
+2. Requirements.txt:
+
+   Als u voornamelijk pip gebruikt voor package-installatie:
+
+   a. Genereer een requirements.txt bestand:
+      ```
+      pip list --format=freeze > requirements.txt
+      ```
+
+   b. Voeg dit bestand toe aan uw GitHub repository.
+
+   c. Op een andere computer, na het maken van een nieuwe Conda-omgeving:
+      ```
+      pip install -r requirements.txt
+      ```
+
+3. Conda-pack:
+
+   Dit is nuttig als u de exacte binaire bestanden wilt overdragen:
+
+   a. Installeer conda-pack:
+      ```
+      conda install -c conda-forge conda-pack
+      ```
+
+   b. Pack uw omgeving:
+      ```
+      conda pack -n porsch2 -o porsch2_env.tar.gz
+      ```
+
+   c. Upload het .tar.gz bestand naar een file sharing service (het kan te groot zijn voor GitHub).
+
+   d. Op een andere computer, unpack de omgeving:
+      ```
+      mkdir -p porsch2_env
+      tar -xzf porsch2_env.tar.gz -C porsch2_env
+      source porsch2_env/bin/activate
+      ```
+
+4. GitHub Actions:
+
+   Als u GitHub Actions gebruikt voor CI/CD, kunt u de omgeving recreëren als onderdeel van uw workflow.
+
+Aanbevolen werkwijze:
+
+1. Gebruik de YAML-methode (optie 1) voor het delen van uw omgeving via GitHub.
+
+2. Houd uw environment.yml bestand up-to-date door het regelmatig te regenereren wanneer u nieuwe packages installeert.
+
+3. In uw GitHub repository, bewaar het environment.yml bestand in de hoofdmap of in een map genaamd 'environment'.
+
+4. Voeg instructies toe aan uw README.md over hoe anderen uw omgeving kunnen recreëren.
+
+5. Als u specifieke versies van packages nodig heeft, specificeer deze in uw environment.yml bestand.
+
+Voorbeeld van een README.md sectie:
+
+```markdown
+## Setting up the environment
+
+To recreate the Conda environment:
+
+1. Ensure you have Anaconda or Miniconda installed.
+2. Clone this repository:
+   ```
+   git clone https://github.com/yourusername/your-repo.git
+   cd your-repo
+   ```
+3. Create the Conda environment:
+   ```
+   conda env create -f environment.yml
+   ```
+4. Activate the environment:
+   ```
+   conda activate porsch2
+   ```
+```
+
+Door deze methode te gebruiken, kunt u gemakkelijk uw ontwikkelomgeving synchroniseren tussen verschillende computers en delen met anderen die aan uw project willen bijdragen.
